@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-public class ItemDetailView extends AppCompatActivity {
+public class ItemDetailView extends AppCompatActivity  {
     TextView listData;
 
     @Override

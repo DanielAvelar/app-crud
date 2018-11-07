@@ -40,13 +40,24 @@
                                           </PersistentState>
                                         </value>
                                       </entry>
+                                      <entry key="foregroundImage">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="scalingPercent" value="45" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
                                     </map>
                                   </option>
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="backgroundColor" value="ffffff" />
-                                      <entry key="foregroundImage" value="C:\Users\davelar\Downloads\if_JD-15_2259875.png" />
+                                      <entry key="foregroundImage" value="C:\Users\davelar\Downloads\if_1-Browser-Interface-photo_3213314.png" />
                                     </map>
                                   </option>
                                 </PersistentState>

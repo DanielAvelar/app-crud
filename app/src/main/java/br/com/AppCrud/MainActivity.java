@@ -3,9 +3,9 @@ package br.com.AppCrud;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,77 +30,89 @@ public class MainActivity extends AppCompatActivity {
     private ProductAdapter mAdapter;
     private ArrayList<Produto> productList;
     private List<Produto> retorno;
-    ListView list;
+    SwipeRefreshLayout pullToRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Start regular onCreate()
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().setTitle("Produtos"); // set the top title
+        pullToRefresh = findViewById(R.id.pullToRefresh);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent i = getIntent();
-                String produtos = i.getStringExtra("produtos");
-
-                try {
-                    JSONObject jsonObj = new JSONObject(produtos);
-
-                    // Getting JSON Array node
-                    JSONArray product = jsonObj.getJSONArray("Products");
-
-                    retorno = new ArrayList<>();
-                    // looping through All Products
-                    for (int contProd = 0; contProd < product.length(); contProd++) {
-                        JSONObject c = product.getJSONObject(contProd);
-                        Gson gson = new Gson();
-                        Produto object = gson.fromJson(c.toString(), Produto.class);
-                        retorno.add(object);
-                    }
-
-                    listView = findViewById(R.id.product_list);
-                    productList = new ArrayList<>();
-
-                    for(Produto produto: retorno) {
-                        productList.add(produto);
-                    }
-
-                    mAdapter = new ProductAdapter(MainActivity.this, productList);
-                    listView.setAdapter(mAdapter);
-
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            Intent intent = new Intent(getApplicationContext(),ItemDetailView.class);
-                            intent.putExtra("image", productList.get(i).getUrlImage());
-                            intent.putExtra("name", productList.get(i).getName());
-                            intent.putExtra("description", productList.get(i).getDescription());
-                            intent.putExtra("amount", productList.get(i).getAmount());
-                            intent.putExtra("id_product", productList.get(i).getIdProduct());
-                            intent.putExtra("category", productList.get(i).getCategory());
-                            intent.putExtra("price", productList.get(i).getPrice());
-                            startActivity(intent);
+        if(CarregarListaProdutos()){
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+            alertDialogBuilder.setTitle("Bem vindo(a)!");
+            alertDialogBuilder
+                    .setMessage("Aplicativo CRUD")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
                         }
                     });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
 
-                } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
-                }
+        //setting an setOnRefreshListener on the SwipeDownLayout
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //Here you can update your data from internet or from local
+                CarregarListaProdutos();
+                pullToRefresh.setRefreshing(false);
             }
-        }, 3000);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
-        alertDialogBuilder.setTitle("Bem vindo(a)!");
-        alertDialogBuilder
-                .setMessage("Aplicativo CRUD")
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        });
+    }
+
+    public boolean CarregarListaProdutos(){
+        Intent i = getIntent();
+        String produtos = i.getStringExtra("produtos");
+
+        try {
+            JSONObject jsonObj = new JSONObject(produtos);
+
+            // Getting JSON Array node
+            JSONArray product = jsonObj.getJSONArray("Products");
+
+            retorno = new ArrayList<>();
+            // looping through All Products
+            for (int contProd = 0; contProd < product.length(); contProd++) {
+                JSONObject c = product.getJSONObject(contProd);
+                Gson gson = new Gson();
+                Produto object = gson.fromJson(c.toString(), Produto.class);
+                retorno.add(object);
+            }
+
+            listView = findViewById(R.id.product_list);
+            productList = new ArrayList<>();
+
+            for(Produto produto: retorno) {
+                productList.add(produto);
+            }
+
+            mAdapter = new ProductAdapter(MainActivity.this, R.layout.list_item, productList);
+            listView.setAdapter(mAdapter);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent intent = new Intent(getApplicationContext(),ItemDetailView.class);
+                    intent.putExtra("image", productList.get(i).getUrlImage());
+                    intent.putExtra("name", productList.get(i).getName());
+                    intent.putExtra("description", productList.get(i).getDescription());
+                    intent.putExtra("amount", productList.get(i).getAmount());
+                    intent.putExtra("id_product", productList.get(i).getIdProduct());
+                    intent.putExtra("category", productList.get(i).getCategory());
+                    intent.putExtra("price", productList.get(i).getPrice());
+                    startActivity(intent);
+                }
+            });
+            return true;
+        } catch (final JSONException e) {
+            Log.e(TAG, "Json parsing error: " + e.getMessage());
+            return false;
+        }
     }
 }
