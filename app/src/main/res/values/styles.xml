@@ -1,23 +1,19 @@
 <resources>
-    <style name="TextColor">
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:background">#000000</item>
-    </style>
 
-    <style name="AppThemeSplashScreen" parent="Theme.AppCompat.Light">
+    <style name="AppThemeSplashScreen" parent="Theme.AppCompat.DayNight">
         <item name="android:windowNoTitle">true</item>
         <item name="android:colorBackground">@drawable/gradient_background</item>
     </style>
 
-    <style name="AppThemeNoBar" parent="Theme.AppCompat.Light">
+    <style name="AppThemeNoBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:background">#808080</item>
     </style>
 
-    <style name="AppThemeBar" parent="Theme.AppCompat.Light">
-        <item name="android:windowNoTitle">false</item>
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:background">#808080</item>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/bg_list_item</item>
+        <item name="android:background">@color/bg_list_item</item>
     </style>
+
 </resources>

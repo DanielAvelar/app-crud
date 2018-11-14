@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:theme="@style/AppTheme"
     android:orientation="vertical">
 
     <ImageView
@@ -14,36 +15,42 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
+        android:textColor="@color/lbl_item_detail"
         android:layout_margin="20dp" />
 
     <TextView
         android:id="@+id/description"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/lbl_item_detail"
         android:layout_margin="20dp" />
 
     <TextView
         android:id="@+id/amount"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/lbl_item_detail"
         android:layout_margin="20dp" />
 
     <TextView
         android:id="@+id/idProduct"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/lbl_item_detail"
         android:layout_margin="20dp" />
 
     <TextView
         android:id="@+id/category"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/lbl_item_detail"
         android:layout_margin="20dp" />
 
     <TextView
         android:id="@+id/price"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/lbl_item_detail"
         android:layout_margin="20dp" />
 
 </LinearLayout>

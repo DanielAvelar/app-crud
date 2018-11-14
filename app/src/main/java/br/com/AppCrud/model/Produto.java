@@ -10,7 +10,7 @@ public class Produto {
     private String price;
     private String urlImage;
 
-    // Constructor that is used to create an instance of the Movie object
+    // Constructor that is used to create an instance of the Produto object
     public Produto(String _id, String name, String description, String amount, String idProduct, String category, String price, String urlImage) {
         this._id = _id;
         this.name = name;
@@ -22,7 +22,7 @@ public class Produto {
         this.urlImage = urlImage;
     }
 
-    public String geId() {
+    public String getId() {
         return _id;
     }
 

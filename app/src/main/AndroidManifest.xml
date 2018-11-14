@@ -2,61 +2,63 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.AppCrud">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:label="@string/appName"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:label="@string/appName"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true">
 
         <!-- Splash screen -->
         <activity
-            android:name="br.com.AppCrud.SplashActivity"
+            android:name=".SplashActivity"
             android:theme="@style/AppThemeSplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="br.com.AppCrud.Login"
+            android:name=".Login"
             android:theme="@style/AppThemeNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="br.com.AppCrud.Registration"
+            android:name=".Registration"
             android:theme="@style/AppThemeNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="br.com.AppCrud.MainActivity"
-            android:theme="@style/AppThemeNoBar"
-            android:label="@string/titleMain">
+            android:name=".MainActivity"
+            android:label="@string/titleMain"
+            android:theme="@style/AppThemeNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="br.com.AppCrud.ItemDetailView"
-            android:theme="@style/AppThemeNoBar"
-            android:label="@string/titleDetail">
+            android:name=".ItemDetailView"
+            android:label="@string/titleDetail"
+            android:theme="@style/AppThemeNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

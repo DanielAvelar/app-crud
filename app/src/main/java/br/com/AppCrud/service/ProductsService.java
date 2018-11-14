@@ -9,14 +9,15 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class HttpServiceProduto{
+public class ProductsService extends AsyncTask<String, Void, String> {
     static String responseJSON;
 
-    public String execute() {
+    @Override
+    protected String doInBackground(String... params) {
         URL url;
         StringBuffer response = new StringBuffer();
         try {
-            url = new URL("https://api-mongodb-crud.herokuapp.com/getProductsNoAuth");
+            url = new URL("https://api-mongodb-crud.herokuapp.com/pages/getProducts?retornoJson=true");
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException("invalid url");
         }
@@ -29,6 +30,7 @@ public class HttpServiceProduto{
             conn.setUseCaches(false);
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+            conn.setRequestProperty("x-access-token", params[0]);
 
             // handle the response
             int status = conn.getResponseCode();

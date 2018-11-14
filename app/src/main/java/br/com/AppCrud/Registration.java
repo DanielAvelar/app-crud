@@ -15,7 +15,7 @@ public class Registration extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-        TextView login = findViewById(R.id.lnkLogin);
+        TextView login = findViewById(R.id.btnLinkToLoginScreen);
         login.setMovementMethod(LinkMovementMethod.getInstance());
         login.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,15 +1,23 @@
 package br.com.AppCrud;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -19,8 +27,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import br.com.AppCrud.model.Produto;
+import br.com.AppCrud.service.ProductsService;
 
 import static android.content.ContentValues.TAG;
 
@@ -31,28 +41,80 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Produto> productList;
     private List<Produto> retorno;
     SwipeRefreshLayout pullToRefresh;
+    private ProgressDialog mProgress;
+
+    private DrawerLayout dl;
+    private ActionBarDrawerToggle t;
+    private NavigationView nv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mProgress = new ProgressDialog(MainActivity.this);
+        mProgress.setTitle("Processing...");
+        mProgress.setMessage("Please wait...");
+        mProgress.setCancelable(false);
+        mProgress.setIndeterminate(true);
+        mProgress.show();
+
         // Start regular onCreate()
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         pullToRefresh = findViewById(R.id.pullToRefresh);
 
-        if(CarregarListaProdutos()){
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
-            alertDialogBuilder.setTitle("Bem vindo(a)!");
-            alertDialogBuilder
-                    .setMessage("Aplicativo CRUD")
-                    .setCancelable(false)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
+        // Now get a handle to any View contained
+        // within the main layout you are using
+        View someView = findViewById(R.id.activity_main_text);
+
+        // Find the root view"
+        View root = someView.getRootView();
+
+        // Set the color
+        root.setBackgroundColor(getResources().getColor(android.R.color.black));
+
+
+        dl = findViewById(R.id.activity_main);
+        t = new ActionBarDrawerToggle(this, dl,R.string.open_drawer, R.string.close_drawer);
+
+        dl.addDrawerListener(t);
+        t.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        nv = findViewById(R.id.nv);
+        nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch(id)
+                {
+                    case R.id.account:
+                        Toast.makeText(MainActivity.this, "My Account",Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.settings:
+                        Toast.makeText(MainActivity.this, "Settings",Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.logout:
+                        Toast.makeText(MainActivity.this, "Logout",Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, Login.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |    Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    default:
+                        return true;
+                }
+                return true;
+            }
+        });
+
+        if (CarregarListaProdutos()) {
+            mProgress.dismiss();
+            RetornaAlerta("Bem vindo(a)!", "Aplicativo CRUD");
+        } else {
+            mProgress.dismiss();
+            RetornaAlerta("Alerta!", "Erro ao carregar a lista de produtos.");
+            Intent intent = new Intent(getApplicationContext(), Login.class);
+            startActivity(intent);
         }
 
         //setting an setOnRefreshListener on the SwipeDownLayout
@@ -66,15 +128,29 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public boolean CarregarListaProdutos(){
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (t.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle your other action bar items...
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public boolean CarregarListaProdutos() {
         Intent i = getIntent();
-        String produtos = i.getStringExtra("produtos");
+        String[] session = new String[1];
+        session[0] = i.getStringExtra("session");
 
         try {
+            String produtos = new ProductsService().execute(session).get();
             JSONObject jsonObj = new JSONObject(produtos);
 
             // Getting JSON Array node
-            JSONArray product = jsonObj.getJSONArray("Products");
+            JSONArray product = jsonObj.getJSONArray("products");
 
             retorno = new ArrayList<>();
             // looping through All Products
@@ -88,17 +164,18 @@ public class MainActivity extends AppCompatActivity {
             listView = findViewById(R.id.product_list);
             productList = new ArrayList<>();
 
-            for(Produto produto: retorno) {
+            for (Produto produto : retorno) {
                 productList.add(produto);
             }
 
+            //mAdapter.clear();
             mAdapter = new ProductAdapter(MainActivity.this, R.layout.list_item, productList);
             listView.setAdapter(mAdapter);
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Intent intent = new Intent(getApplicationContext(),ItemDetailView.class);
+                    Intent intent = new Intent(getApplicationContext(), ItemDetailView.class);
                     intent.putExtra("image", productList.get(i).getUrlImage());
                     intent.putExtra("name", productList.get(i).getName());
                     intent.putExtra("description", productList.get(i).getDescription());
@@ -113,6 +190,46 @@ public class MainActivity extends AppCompatActivity {
         } catch (final JSONException e) {
             Log.e(TAG, "Json parsing error: " + e.getMessage());
             return false;
+        } catch (InterruptedException e) {
+            Log.e(TAG, e.getMessage());
+            return false;
+        } catch (ExecutionException e) {
+            Log.e(TAG, e.getMessage());
+            return false;
+        }
+    }
+
+    private void RetornaAlerta(String titulo, String mensagem) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+        alertDialogBuilder.setTitle(titulo);
+        alertDialogBuilder
+                .setMessage(mensagem)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private Boolean exit = false;
+    @Override
+    public void onBackPressed() {
+        if (exit) {
+            finish(); // finish activity
+            System.exit(0);
+        } else {
+            Toast.makeText(this, "Press Back again to Exit.",
+                    Toast.LENGTH_SHORT).show();
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
         }
     }
 }
