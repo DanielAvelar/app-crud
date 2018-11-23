@@ -12,9 +12,7 @@ public class Autenticacao {
         this.message = message;
     }
 
-    public Boolean getAutenticacao() {
-        return authentication;
-    }
+    public Boolean getAutenticacao() {return authentication; }
 
     public void setAutenticacao(Boolean authentication) {
         this.authentication = authentication;

@@ -4,9 +4,11 @@
     <string name="slogan">CRUD</string>
     <string name="titleMain">Lista de Produtos</string>
     <string name="titleDetail">Detalhe do Produto</string>
-    <string name="hint_user">User</string>
+    <string name="hint_user">User Name</string>
     <string name="hint_password">Password</string>
+    <string name="hint_administrator">Administrator</string>
     <string name="hint_name">Fullname</string>
+    <string name="hint_email">E-mail</string>
     <string name="btn_login">LOGIN</string>
     <string name="btn_register">REGISTER</string>
     <string name="btn_link_to_register">Not a member? Sign up now.</string>

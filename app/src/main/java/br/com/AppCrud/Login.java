@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import br.com.AppCrud.model.Autenticacao;
-import br.com.AppCrud.service.ValidateUserService;
+import br.com.AppCrud.service.UserService;
 
 public class Login extends AppCompatActivity {
     private static String retorno;
@@ -94,7 +94,7 @@ public class Login extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            return new ValidateUserService().returnDataUser(params[0], params[1]);
+            return new UserService().returnDataUser(params[0], params[1]);
         }
 
         @Override
