@@ -18,4 +18,5 @@
     <color name="btn_logut_bg">#ff6861</color>
     <color name="header_nav">#3b4148</color>
     <color name="body_nav">#5e6266</color>
+    <color name="text_black">#000000</color>
 </resources>

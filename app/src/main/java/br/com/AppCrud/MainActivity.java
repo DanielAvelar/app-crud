@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         dl.addDrawerListener(t);
         t.syncState();
 
+        if (getSupportActionBar() != null)
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         nv = findViewById(R.id.nv);
@@ -106,6 +108,12 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        Intent i = getIntent();
+        String user = i.getStringExtra("user");
+        View headerView = nv.getHeaderView(0);
+        TextView navUsername = headerView.findViewById(R.id.textUser);
+        navUsername.setText(user);
 
         if (CarregarListaProdutos()) {
             mProgress.dismiss();
@@ -164,9 +172,7 @@ public class MainActivity extends AppCompatActivity {
             listView = findViewById(R.id.product_list);
             productList = new ArrayList<>();
 
-            for (Produto produto : retorno) {
-                productList.add(produto);
-            }
+            productList.addAll(retorno);
 
             //mAdapter.clear();
             mAdapter = new ProductAdapter(MainActivity.this, R.layout.list_item, productList);
