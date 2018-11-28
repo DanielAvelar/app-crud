@@ -73,13 +73,13 @@ public class UserService {
 
     public String createUser(String name, String password, String email, String administrator) {
         try {
-            URL url = new URL("https://api-mongodb-crud.herokuapp.com/pages/newUser?retornoJson=true"); // here is your URL path
+            URL url = new URL("https://api-mongodb-crud.herokuapp.com/createNewUser?retornoJson=true"); // here is your URL path
 
             JSONObject postDataParams = new JSONObject();
             postDataParams.put("name", name);
             postDataParams.put("password", password);
             postDataParams.put("email", email);
-            postDataParams.put("administrator", administrator);
+            postDataParams.put("admin", administrator == "true" ? "ON" : "OFF");
 
             Log.e("params",postDataParams.toString());
 
@@ -100,6 +100,7 @@ public class UserService {
             os.close();
 
             int responseCode=conn.getResponseCode();
+            String responseMessage = conn.getResponseMessage();
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {
                 BufferedReader in=new BufferedReader(new
@@ -118,11 +119,11 @@ public class UserService {
                 return sb.toString();
             }
             else {
-                return new String("{message : Erro ao gravar usuário., retorno: false}");
+                return new String("{message : " + responseMessage + ", retorno: false}");
             }
         }
         catch(Exception e){
-            return new String("{message : Erro ao gravar usuário., retorno: false}");
+            return new String("{message : " + e.getMessage() + ", retorno: false}");
         }
     }
 

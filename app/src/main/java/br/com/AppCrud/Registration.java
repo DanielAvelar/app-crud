@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import br.com.AppCrud.model.RetornoCriarUsuario;
+import br.com.AppCrud.model.ReturnServices;
 import br.com.AppCrud.service.UserService;
 
 public class Registration extends AppCompatActivity {
@@ -46,7 +46,7 @@ public class Registration extends AppCompatActivity {
             }
         });
 
-        TextView register = findViewById(R.id.btnLinkToRegisterScreen);
+        TextView register = findViewById(R.id.btnRegister);
         register.setMovementMethod(LinkMovementMethod.getInstance());
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +54,7 @@ public class Registration extends AppCompatActivity {
                 String usuario = username.getText().toString();
                 String senha = password.getText().toString();
                 String email = txtEmail.getText().toString();
-                String administrator = txtAdministrator.getText().toString();
+                boolean administrator = txtAdministrator.isChecked();
 
                 StringBuilder sb = new StringBuilder();
                 sb.append(usuario);
@@ -63,7 +63,7 @@ public class Registration extends AppCompatActivity {
                 params[0] = usuario;
                 params[1] = senha;
                 params[2] = email;
-                params[3] = administrator;
+                params[3] = String.valueOf(administrator);
 
                 try {
                     retorno = new CriarUsuario().execute(params).get();
@@ -71,12 +71,17 @@ public class Registration extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 Gson gson = new Gson();
-                RetornoCriarUsuario dadosCriarUsuario = gson.fromJson(retorno, RetornoCriarUsuario.class);
-                if (dadosCriarUsuario.getRetorno()) {
-                    Intent i = new Intent(Registration.this, Login.class);
-                    startActivity(i);
-                } else {
-                    Toast.makeText(Registration.this, dadosCriarUsuario.getMessage(),
+                ReturnServices dadosCriarUsuario = gson.fromJson(retorno, ReturnServices.class);
+                if(dadosCriarUsuario != null){
+                    if (dadosCriarUsuario.getRetorno()) {
+                        Intent i = new Intent(Registration.this, Login.class);
+                        startActivity(i);
+                    } else {
+                        Toast.makeText(Registration.this, dadosCriarUsuario.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(Registration.this, "Erro ao tentar gravar usuário.",
                             Toast.LENGTH_SHORT).show();
                 }
             }

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -47,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout dl;
     private ActionBarDrawerToggle t;
     private NavigationView nv;
+
+    private Boolean exit = false;
+    private String[] session = new String[1];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,11 +154,10 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean CarregarListaProdutos() {
         Intent i = getIntent();
-        String[] session = new String[1];
         session[0] = i.getStringExtra("session");
 
         try {
-            String produtos = new ProductsService().execute(session).get();
+            String produtos = new CarregarTodosProdutos().execute(session).get();
             JSONObject jsonObj = new JSONObject(produtos);
 
             // Getting JSON Array node
@@ -182,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     Intent intent = new Intent(getApplicationContext(), ItemDetailView.class);
+                    intent.putExtra("session", session[0]);
                     intent.putExtra("image", productList.get(i).getUrlImage());
                     intent.putExtra("name", productList.get(i).getName());
                     intent.putExtra("description", productList.get(i).getDescription());
@@ -220,7 +224,13 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private Boolean exit = false;
+    public class CarregarTodosProdutos extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            return new ProductsService().getAllProducts(params[0]);
+        }
+    }
+
     @Override
     public void onBackPressed() {
         if (exit) {

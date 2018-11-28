@@ -1,19 +1,21 @@
 package br.com.AppCrud.service;
 
-import android.os.AsyncTask;
-
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class ProductsService extends AsyncTask<String, Void, String> {
-    static String responseJSON;
+import javax.net.ssl.HttpsURLConnection;
 
-    @Override
-    protected String doInBackground(String... params) {
+public class ProductsService {
+    private String responseJSON;
+
+    public String getAllProducts(String token) {
         URL url;
         StringBuffer response = new StringBuffer();
         try {
@@ -30,7 +32,7 @@ public class ProductsService extends AsyncTask<String, Void, String> {
             conn.setUseCaches(false);
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-            conn.setRequestProperty("x-access-token", params[0]);
+            conn.setRequestProperty("x-access-token", token);
 
             // handle the response
             int status = conn.getResponseCode();
@@ -54,5 +56,53 @@ public class ProductsService extends AsyncTask<String, Void, String> {
             responseJSON = response.toString();
         }
         return responseJSON;
+    }
+
+    public String deleteProduct(String idProduct, String token) {
+        try {
+            URL url = new URL("https://api-mongodb-crud.herokuapp.com/pages/deleteProduct/" + idProduct + "?retornoJson=true"); // here is your URL path
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000 /* milliseconds */);
+            conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setRequestMethod("POST");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+            conn.setRequestProperty("x-access-token", token);
+
+            OutputStream os = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(os, "UTF-8"));
+            writer.flush();
+            writer.close();
+            os.close();
+
+            int responseCode=conn.getResponseCode();
+            String responseMessage = conn.getResponseMessage();
+
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                BufferedReader in=new BufferedReader(new
+                        InputStreamReader(
+                        conn.getInputStream()));
+
+                StringBuffer sb = new StringBuffer();
+                String line;
+
+                while((line = in.readLine()) != null) {
+                    sb.append(line);
+                    break;
+                }
+
+                in.close();
+                return sb.toString();
+            }
+            else {
+                return new String("{message : " + responseMessage + ", retorno: false}");
+            }
+        }
+        catch(Exception e){
+            return new String("{message : " + e.getMessage() + ", retorno: false}");
+        }
     }
 }

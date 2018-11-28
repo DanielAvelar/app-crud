@@ -35,8 +35,8 @@ public class Login extends AppCompatActivity {
         username = findViewById(R.id.user);
         password = findViewById(R.id.password);
         login_btn = findViewById(R.id.btnLogin);
-        Button register = findViewById(R.id.btnLinkToRegisterScreen);
 
+        Button register = findViewById(R.id.btnLinkToRegisterScreen);
         register.setMovementMethod(LinkMovementMethod.getInstance());
         register.setOnClickListener(new View.OnClickListener() {
             @Override

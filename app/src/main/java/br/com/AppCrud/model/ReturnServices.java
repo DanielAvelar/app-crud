@@ -1,11 +1,11 @@
 package br.com.AppCrud.model;
 
-public class RetornoCriarUsuario {
+public class ReturnServices {
     private Boolean retorno;
     private String message;
 
     // Constructor that is used to create an instance of the Movie object
-    public RetornoCriarUsuario(Boolean retorno, String message) {
+    public ReturnServices(Boolean retorno, String message) {
         this.retorno = retorno;
         this.message = message;
     }
