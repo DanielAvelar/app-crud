@@ -13,11 +13,10 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class ProductsService {
-    private String responseJSON;
 
     public String getAllProducts(String token) {
         URL url;
-        StringBuffer response = new StringBuffer();
+        StringBuilder response = new StringBuilder();
         try {
             url = new URL("https://api-mongodb-crud.herokuapp.com/pages/getProducts?retornoJson=true");
         } catch (MalformedURLException e) {
@@ -25,6 +24,7 @@ public class ProductsService {
         }
 
         HttpURLConnection conn = null;
+        String responseJSON;
         try {
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(false);
@@ -82,27 +82,25 @@ public class ProductsService {
             String responseMessage = conn.getResponseMessage();
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {
-                BufferedReader in=new BufferedReader(new
+                BufferedReader in = new BufferedReader(new
                         InputStreamReader(
                         conn.getInputStream()));
 
-                StringBuffer sb = new StringBuffer();
-                String line;
+                StringBuilder sb = new StringBuilder();
 
-                while((line = in.readLine()) != null) {
+                for (String line = in.readLine(); line != null; line = in.readLine()) {
                     sb.append(line);
-                    break;
                 }
 
                 in.close();
                 return sb.toString();
             }
             else {
-                return new String("{message : " + responseMessage + ", retorno: false}");
+                return "{message : " + responseMessage + ", retorno: false}";
             }
         }
         catch(Exception e){
-            return new String("{message : " + e.getMessage() + ", retorno: false}");
+            return "{message : " + e.getMessage() + ", retorno: false}";
         }
     }
 }

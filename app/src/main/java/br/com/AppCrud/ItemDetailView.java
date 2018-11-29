@@ -22,8 +22,7 @@ import java.util.concurrent.ExecutionException;
 import br.com.AppCrud.model.ReturnServices;
 import br.com.AppCrud.service.ProductsService;
 
-public class ItemDetailView extends AppCompatActivity  {
-    private TextView listData;
+public class ItemDetailView extends AppCompatActivity {
     private String idProduct;
     private String session;
 
@@ -33,14 +32,14 @@ public class ItemDetailView extends AppCompatActivity  {
         setContentView(R.layout.item_detail);
 
         Intent intent = getIntent();
-        session =  intent.getStringExtra("session");
-        String imageUrl =  intent.getStringExtra("image");
-        String name =  intent.getStringExtra("name");
-        String description =  intent.getStringExtra("description");
-        String amount =  intent.getStringExtra("amount");
-        idProduct =  intent.getStringExtra("id_product");
-        String category =  intent.getStringExtra("category");
-        String price =  intent.getStringExtra("price");
+        session = intent.getStringExtra("session");
+        String imageUrl = intent.getStringExtra("image");
+        String name = intent.getStringExtra("name");
+        String description = intent.getStringExtra("description");
+        String amount = intent.getStringExtra("amount");
+        idProduct = intent.getStringExtra("id_product");
+        String category = intent.getStringExtra("category");
+        String price = intent.getStringExtra("price");
 
         ImageView image = findViewById((R.id.image));
         Glide.with(this)
@@ -52,26 +51,28 @@ public class ItemDetailView extends AppCompatActivity  {
                 .error(R.drawable.ic_launcher_foreground) // On error image
                 .into(image);// ImageView to display image
 
-        listData = findViewById(R.id.name);
-        listData.setText("Nome: " + name);
+        TextView listData = findViewById(R.id.name);
+        listData.setText(getString(R.string.lbl_nome, name));
 
         listData = findViewById(R.id.description);
-        listData.setText("Descrição: " + description);
+        listData.setText(getString(R.string.lbl_descricao, description));
 
         listData = findViewById(R.id.amount);
-        listData.setText("Quantidade: " + amount);
+        listData.setText(getString(R.string.lbl_quantidade, amount));
 
         listData = findViewById(R.id.idProduct);
-        listData.setText("Id do Produto: " + idProduct);
+        listData.setText(getString(R.string.lbl_id_produto, idProduct));
 
         listData = findViewById(R.id.category);
-        listData.setText("Categoria: " + category);
+        listData.setText(getString(R.string.lbl_categoria, category));
 
         listData = findViewById(R.id.price);
-        listData.setText("Preço: " + price);
+        listData.setText(getString(R.string.lbl_preco, price));
 
         //enable back Button
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         Button btnDelete = findViewById(R.id.btn_delete);
         btnDelete.setMovementMethod(LinkMovementMethod.getInstance());
@@ -124,7 +125,7 @@ public class ItemDetailView extends AppCompatActivity  {
         });
     }
 
-    public class deletarProduto extends AsyncTask<String, Void, String> {
+    public static class deletarProduto extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
             return new ProductsService().deleteProduct(params[0], params[1]);
@@ -140,6 +141,7 @@ public class ItemDetailView extends AppCompatActivity  {
         return super.onOptionsItemSelected(item);
 
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

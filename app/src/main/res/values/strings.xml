@@ -15,6 +15,8 @@
     <string name="btn_link_to_login">Already registred! Login Me.</string>
     <string name="welcome">Welcome</string>
     <string name="btn_logout">LOGOUT</string>
+    <string name="btn_edit">Edit</string>
+    <string name="btn_delete">Delete</string>
     <string name="name">Fullname</string>
     <string name="title_activity_menu">MenuActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -25,4 +27,12 @@
     <string name="action_settings">Settings</string>
     <string name="open_drawer">Abrir</string>
     <string name="close_drawer">Fechar</string>
+    <string name="lbl_nome">Nome: %1$s</string>
+    <string name="lbl_image">Image</string>
+    <string name="lbl_descricao">Descrição: %1$s</string>
+    <string name="lbl_quantidade">Quantidade: %1$s</string>
+    <string name="lbl_id_produto">Id do Produto: %1$s</string>
+    <string name="lbl_categoria">Categoria: %1$s</string>
+    <string name="lbl_preco">Preço: %1$s</string>
+    <string name="copyright">© App Crud 2018</string>
 </resources>

@@ -38,7 +38,6 @@ import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ListView listView;
     private ProductAdapter mAdapter;
     private ArrayList<Produto> productList;
     private List<Produto> retorno;
@@ -172,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 retorno.add(object);
             }
 
-            listView = findViewById(R.id.product_list);
+            ListView listView = findViewById(R.id.product_list);
             productList = new ArrayList<>();
 
             productList.addAll(retorno);
@@ -224,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    public class CarregarTodosProdutos extends AsyncTask<String, Void, String> {
+    public static class CarregarTodosProdutos extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
             return new ProductsService().getAllProducts(params[0]);

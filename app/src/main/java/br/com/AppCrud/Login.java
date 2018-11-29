@@ -18,23 +18,24 @@ import br.com.AppCrud.model.Autenticacao;
 import br.com.AppCrud.service.UserService;
 
 public class Login extends AppCompatActivity {
-    private static String retorno;
-    private static EditText username;
-    private static EditText password;
-    private static Button login_btn;
+    private String retorno;
+    private EditText username;
+    private EditText password;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        getSupportActionBar().hide();
+        progressBar = findViewById(R.id.progressBar);
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
         LoginButton();
     }
 
     public void LoginButton() {
         username = findViewById(R.id.user);
         password = findViewById(R.id.password);
-        login_btn = findViewById(R.id.btnLogin);
+        Button login_btn = findViewById(R.id.btnLogin);
 
         Button register = findViewById(R.id.btnLinkToRegisterScreen);
         register.setMovementMethod(LinkMovementMethod.getInstance());
@@ -85,10 +86,8 @@ public class Login extends AppCompatActivity {
     }
 
     public class ValidarUsuario extends AsyncTask<String, Void, String> {
-        ProgressBar progressBar=(ProgressBar)findViewById(R.id.progressBar);
-
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             progressBar.setVisibility(View.VISIBLE);
         }
 
@@ -98,12 +97,13 @@ public class Login extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String result){
+        protected void onPostExecute(String result) {
             progressBar.setVisibility(View.INVISIBLE);
         }
     }
 
     private Boolean exit = true;
+
     @Override
     public void onBackPressed() {
         if (exit) {

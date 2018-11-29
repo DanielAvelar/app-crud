@@ -26,7 +26,7 @@ public class UserService {
             postDataParams.put("name", name);
             postDataParams.put("password", password);
 
-            Log.e("params",postDataParams.toString());
+            Log.e("params", postDataParams.toString());
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000 /* milliseconds */);
@@ -44,30 +44,26 @@ public class UserService {
             writer.close();
             os.close();
 
-            int responseCode=conn.getResponseCode();
+            int responseCode = conn.getResponseCode();
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {
-                BufferedReader in=new BufferedReader(new
+                BufferedReader in = new BufferedReader(new
                         InputStreamReader(
                         conn.getInputStream()));
 
-                StringBuffer sb = new StringBuffer();
-                String line;
+                StringBuilder sb = new StringBuilder();
 
-                while((line = in.readLine()) != null) {
+                for (String line = in.readLine(); line != null; line = in.readLine()) {
                     sb.append(line);
-                    break;
                 }
 
                 in.close();
                 return sb.toString();
+            } else {
+                return "{authentication : false}";
             }
-            else {
-                return new String("{authentication : false}");
-            }
-        }
-        catch(Exception e){
-            return new String("{authentication: false}");
+        } catch (Exception e) {
+            return "{authentication: false}";
         }
     }
 
@@ -79,9 +75,9 @@ public class UserService {
             postDataParams.put("name", name);
             postDataParams.put("password", password);
             postDataParams.put("email", email);
-            postDataParams.put("admin", administrator == "true" ? "ON" : "OFF");
+            postDataParams.put("admin", administrator.equals("true") ? "ON" : "OFF");
 
-            Log.e("params",postDataParams.toString());
+            Log.e("params", postDataParams.toString());
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000 /* milliseconds */);
@@ -99,43 +95,42 @@ public class UserService {
             writer.close();
             os.close();
 
-            int responseCode=conn.getResponseCode();
+            int responseCode = conn.getResponseCode();
             String responseMessage = conn.getResponseMessage();
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {
-                BufferedReader in=new BufferedReader(new
+                BufferedReader in = new BufferedReader(new
                         InputStreamReader(
                         conn.getInputStream()));
 
-                StringBuffer sb = new StringBuffer();
-                String line;
+                StringBuilder sb;
+                sb = new StringBuilder();
 
-                while((line = in.readLine()) != null) {
+                for (String line = in.readLine(); line != null; line = in.readLine()) {
                     sb.append(line);
-                    break;
                 }
 
                 in.close();
                 return sb.toString();
+            } else {
+                //return new String("{message : " + responseMessage + ", retorno: false}");
+                return "{message : " + responseMessage + ", retorno: false}";
             }
-            else {
-                return new String("{message : " + responseMessage + ", retorno: false}");
-            }
-        }
-        catch(Exception e){
-            return new String("{message : " + e.getMessage() + ", retorno: false}");
+        } catch (Exception e) {
+            //return new String("{message : " + e.getMessage() + ", retorno: false}");
+            return "{message : " + e.getMessage() + ", retorno: false}";
         }
     }
 
-    public String getPostDataString(JSONObject params) throws Exception {
+    private String getPostDataString(JSONObject params) throws Exception {
         StringBuilder result = new StringBuilder();
         boolean first = true;
 
         Iterator<String> itr = params.keys();
 
-        while(itr.hasNext()){
+        while (itr.hasNext()) {
 
-            String key= itr.next();
+            String key = itr.next();
             Object value = params.get(key);
 
             if (first)
