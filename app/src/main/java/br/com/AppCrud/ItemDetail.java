@@ -22,24 +22,24 @@ import java.util.concurrent.ExecutionException;
 import br.com.AppCrud.model.ReturnServices;
 import br.com.AppCrud.service.ProductsService;
 
-public class ItemDetailView extends AppCompatActivity {
+public class ItemDetail extends AppCompatActivity {
     private String idProduct;
     private String session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.item_detail);
+        setContentView(R.layout.detail_item);
 
         Intent intent = getIntent();
         session = intent.getStringExtra("session");
-        String imageUrl = intent.getStringExtra("image");
-        String name = intent.getStringExtra("name");
-        String description = intent.getStringExtra("description");
-        String amount = intent.getStringExtra("amount");
+        final String imageUrl = intent.getStringExtra("image");
+        final String name = intent.getStringExtra("name");
+        final String description = intent.getStringExtra("description");
+        final String amount = intent.getStringExtra("amount");
         idProduct = intent.getStringExtra("id_product");
-        String category = intent.getStringExtra("category");
-        String price = intent.getStringExtra("price");
+        final String category = intent.getStringExtra("category");
+        final String price = intent.getStringExtra("price");
 
         ImageView image = findViewById((R.id.image));
         Glide.with(this)
@@ -74,12 +74,30 @@ public class ItemDetailView extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        Button btnEdit = findViewById(R.id.btn_edit);
+        btnEdit.setMovementMethod(LinkMovementMethod.getInstance());
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ItemDetail.this, ItemEdit.class);
+                intent.putExtra("session", session);
+                intent.putExtra("image", imageUrl);
+                intent.putExtra("name", name);
+                intent.putExtra("description", description);
+                intent.putExtra("amount", amount);
+                intent.putExtra("id_product", idProduct);
+                intent.putExtra("category", category);
+                intent.putExtra("price", price);
+                startActivity(intent);
+            }
+        });
+
         Button btnDelete = findViewById(R.id.btn_delete);
         btnDelete.setMovementMethod(LinkMovementMethod.getInstance());
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ItemDetailView.this);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ItemDetail.this);
                 alertDialogBuilder.setTitle("Alerta");
                 alertDialogBuilder
                         .setMessage("Tem certeza que deseja excluir esse produto?")
@@ -107,14 +125,14 @@ public class ItemDetailView extends AppCompatActivity {
                                 ReturnServices retornoDeleteProduto = gson.fromJson(retornDeleteProduct, ReturnServices.class);
                                 if (retornoDeleteProduto.getRetorno()) {
                                     dialog.cancel();
-                                    Toast.makeText(ItemDetailView.this, "Produto excluído com sucesso!",
+                                    Toast.makeText(ItemDetail.this, "Produto excluído com sucesso!",
                                             Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(ItemDetailView.this, MainActivity.class);
+                                    Intent intent = new Intent(ItemDetail.this, MainActivity.class);
                                     intent.putExtra("session", session);
                                     startActivity(intent);
                                 } else {
                                     dialog.cancel();
-                                    Toast.makeText(ItemDetailView.this, "Erro ao excluir o produto!",
+                                    Toast.makeText(ItemDetail.this, "Erro ao excluir o produto!",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }

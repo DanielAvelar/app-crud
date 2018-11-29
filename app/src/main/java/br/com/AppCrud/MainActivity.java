@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Intent intent = new Intent(getApplicationContext(), ItemDetailView.class);
+                    Intent intent = new Intent(getApplicationContext(), ItemDetail.class);
                     intent.putExtra("session", session[0]);
                     intent.putExtra("image", productList.get(i).getUrlImage());
                     intent.putExtra("name", productList.get(i).getName());

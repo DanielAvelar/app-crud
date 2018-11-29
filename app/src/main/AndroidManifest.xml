@@ -50,7 +50,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ItemDetailView"
+            android:name=".ItemDetail"
+            android:label="@string/titleDetail"
+            android:theme="@style/AppThemeNoBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ItemEdit"
             android:label="@string/titleDetail"
             android:theme="@style/AppThemeNoBar">
             <intent-filter>
