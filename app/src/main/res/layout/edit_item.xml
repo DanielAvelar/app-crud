@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:theme="@style/AppTheme"
@@ -9,72 +8,76 @@
         android:id="@+id/urlImage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
         android:textColor="@color/lbl_item_detail"
-        android:layout_margin="20dp"
-        android:inputType="text"
-        android:importantForAutofill="no"
-        tools:targetApi="o"/>
+        android:layout_margin="10dp"
+        android:hint="Url da Imagem"/>
 
     <EditText
         android:id="@+id/name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
         android:textColor="@color/lbl_item_detail"
-        android:layout_margin="20dp"
-        android:inputType="text"
-        android:importantForAutofill="no"
-        tools:targetApi="o"/>
+        android:layout_margin="10dp"
+        android:hint="Nome"/>
 
     <EditText
         android:id="@+id/description"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/lbl_item_detail"
-        android:layout_margin="20dp"
-        android:inputType="text"
-        android:importantForAutofill="no"
-        tools:targetApi="o"/>
+        android:layout_margin="10dp"
+        android:hint="Descrição"/>
 
     <EditText
         android:id="@+id/amount"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/lbl_item_detail"
-        android:layout_margin="20dp"
-        android:inputType="number"
-        android:importantForAutofill="no"
-        tools:targetApi="o"/>
-
-    <EditText
-        android:id="@+id/idProduct"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/lbl_item_detail"
-        android:layout_margin="20dp"
-        android:inputType="number"
-        android:importantForAutofill="no"
-        tools:targetApi="o"/>
+        android:layout_margin="10dp"
+        android:hint="Quantidade"/>
 
     <EditText
         android:id="@+id/category"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/lbl_item_detail"
-        android:layout_margin="20dp"
-        android:inputType="text"
-        android:importantForAutofill="no"
-        tools:targetApi="o" />
+        android:layout_margin="10dp"
+        android:hint="Categoria"/>
 
     <EditText
         android:id="@+id/price"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/lbl_item_detail"
-        android:layout_margin="20dp"
-        android:inputType="number"
-        android:importantForAutofill="no"
-        tools:targetApi="o" />
+        android:layout_margin="10dp"
+        android:hint="Preço"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/body_nav"
+            android:text="@string/btn_save"
+            android:textColor="@color/btn_text_niagara"
+            android:layout_marginRight="20dp"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/body_nav"
+            android:text="@string/btn_cancel"
+            android:textColor="@color/btn_text_niagara"
+            android:layout_marginLeft="20dp"
+            android:layout_margin="10dp"/>
+    </LinearLayout>
 
 </LinearLayout>

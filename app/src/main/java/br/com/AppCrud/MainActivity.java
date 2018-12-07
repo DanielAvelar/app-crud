@@ -1,8 +1,6 @@
 package br.com.AppCrud;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -58,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         mProgress.setMessage("Please wait...");
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
-        mProgress.show();
 
         // Start regular onCreate()
         super.onCreate(savedInstanceState);
@@ -75,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Set the color
         root.setBackgroundColor(getResources().getColor(android.R.color.black));
-
 
         dl = findViewById(R.id.activity_main);
         t = new ActionBarDrawerToggle(this, dl,R.string.open_drawer, R.string.close_drawer);
@@ -120,10 +116,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (CarregarListaProdutos()) {
             mProgress.dismiss();
-            RetornaAlerta("Bem vindo(a)!", "Aplicativo CRUD");
         } else {
             mProgress.dismiss();
-            RetornaAlerta("Alerta!", "Erro ao carregar a lista de produtos.");
             Intent intent = new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
         }
@@ -208,25 +202,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void RetornaAlerta(String titulo, String mensagem) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
-        alertDialogBuilder.setTitle(titulo);
-        alertDialogBuilder
-                .setMessage(mensagem)
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
+    public class CarregarTodosProdutos extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            mProgress.show();
+        }
 
-    public static class CarregarTodosProdutos extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
             return new ProductsService().getAllProducts(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            mProgress.dismiss();
         }
     }
 

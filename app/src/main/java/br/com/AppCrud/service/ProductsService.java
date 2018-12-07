@@ -1,5 +1,7 @@
 package br.com.AppCrud.service;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -9,6 +11,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Iterator;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -102,5 +106,83 @@ public class ProductsService {
         catch(Exception e){
             return "{message : " + e.getMessage() + ", retorno: false}";
         }
+    }
+
+    public String editProduct(String token, String idProduct, String urlImage, String name, String description, String amount, String category, String price) {
+        try {
+            URL url = new URL("https://api-mongodb-crud.herokuapp.com/pages/updateProduct/" + idProduct + "?retornoJson=true"); // here is your URL path
+
+            JSONObject postDataParams = new JSONObject();
+            postDataParams.put("urlImage", urlImage);
+            postDataParams.put("name", name);
+            postDataParams.put("description", description);
+            postDataParams.put("amount", amount);
+            postDataParams.put("category", category);
+            postDataParams.put("price", price);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000 /* milliseconds */);
+            conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setRequestMethod("POST");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+            conn.setRequestProperty("x-access-token", token);
+
+            OutputStream os = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(os, "UTF-8"));
+            writer.write(getPostDataString(postDataParams));
+            writer.flush();
+            writer.close();
+            os.close();
+
+            int responseCode=conn.getResponseCode();
+            String responseMessage = conn.getResponseMessage();
+
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(
+                        conn.getInputStream()));
+
+                StringBuilder sb = new StringBuilder();
+
+                for (String line = in.readLine(); line != null; line = in.readLine()) {
+                    sb.append(line);
+                }
+
+                in.close();
+                return sb.toString();
+            }
+            else {
+                return "{message : " + responseMessage + ", retorno: false}";
+            }
+        }
+        catch(Exception e){
+            return "{message : " + e.getMessage() + ", retorno: false}";
+        }
+    }
+
+    private String getPostDataString(JSONObject params) throws Exception {
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+
+        Iterator<String> itr = params.keys();
+
+        while (itr.hasNext()) {
+
+            String key = itr.next();
+            Object value = params.get(key);
+
+            if (first)
+                first = false;
+            else
+                result.append("&");
+
+            result.append(URLEncoder.encode(key, "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(value.toString(), "UTF-8"));
+        }
+        return result.toString();
     }
 }

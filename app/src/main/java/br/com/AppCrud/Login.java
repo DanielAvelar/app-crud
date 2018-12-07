@@ -28,6 +28,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         progressBar = findViewById(R.id.progressBar);
+
         if (getSupportActionBar() != null) getSupportActionBar().hide();
         LoginButton();
     }
